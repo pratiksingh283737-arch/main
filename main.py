@@ -19,14 +19,14 @@ from flask import Flask
 # --- ⚙️ CONFIGURATION (APNI DETAILS YAHAN BHAREIN) ---
 # ====================================================================
 
-API_TOKEN = 'YOUR_BOT_TOKEN_HERE'  # BotFather Token
-ADMIN_ID = 1234567890               # Apni Numeric Telegram ID
-ADMIN_GROUP_ID = -1001234567890     # Logs Group ID
-FORCE_SUB_CHANNEL = "@YourChannel"  # Channel Username
-CHANNEL_ID = -100123456789          # Channel ID
-REFERRAL_REWARD = 50                # Ek invite par kitne coins milenge
-DAILY_BONUS_AMOUNT = 25             # Daily bonus coins
-COIN_PRICE_VIP = 500                # 1 Month VIP ke liye kitne coins chahiye
+API_TOKEN = '8469204740:AAFiZUpXbmQMdkM4bimceB6TVWgRYPA13_8'  # BotFather Token
+ADMIN_ID = 8541572102               # Apni Numeric Telegram ID
+ADMIN_GROUP_ID = -1003423423159     # Logs Group ID
+FORCE_SUB_CHANNEL = "@zry_x_75"  # Channel Username
+CHANNEL_ID = -1003423729715          # Channel ID
+REFERRAL_REWARD = 10                # Ek invite par kitne coins milenge
+DAILY_BONUS_AMOUNT = 4            # Daily bonus coins
+COIN_PRICE_VIP = 100                # 1 Month VIP ke liye kitne coins chahiye
 
 # ====================================================================
 # --- 📁 SYSTEM & DATABASE PATHS ---
@@ -43,7 +43,7 @@ DB_COUPONS = "coupons_db.json"
 
 # Default Settings
 default_settings = {
-    "upi_id": "yourupi@okaxis",
+    "upi_id": "pratiksingh4@fam",
     "price": 49,
     "group_price": 19,
     "maintenance_mode": False
