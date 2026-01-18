@@ -22,11 +22,11 @@ from flask import Flask
 API_TOKEN = '8469204740:AAFiZUpXbmQMdkM4bimceB6TVWgRYPA13_8'  # BotFather Token
 ADMIN_ID = 8541572102               # Apni Numeric Telegram ID
 ADMIN_GROUP_ID = -1003423423159     # Logs Group ID
-FORCE_SUB_CHANNEL = "@zry_x_75"  # Channel Username
-CHANNEL_ID = -1003423729715          # Channel ID
+FORCE_SUB_CHANNEL = "@zry_x_75"  # Channel Username (Correct likhna)
+CHANNEL_ID = -1003423729715          # Channel ID (Agar ye galat bhi hua to Username se kaam chal jayega)
 REFERRAL_REWARD = 10                # Ek invite par kitne coins milenge
-DAILY_BONUS_AMOUNT = 4            # Daily bonus coins
-COIN_PRICE_VIP = 100                # 1 Month VIP ke liye kitne coins chahiye
+DAILY_BONUS_AMOUNT = 4             # Daily bonus coins
+COIN_PRICE_VIP = 50                # 1 Month VIP ke liye kitne coins chahiye
 
 # ====================================================================
 # --- 📁 SYSTEM & DATABASE PATHS ---
@@ -43,7 +43,7 @@ DB_COUPONS = "coupons_db.json"
 
 # Default Settings
 default_settings = {
-    "upi_id": "pratiksingh4@fam",
+    "upi_id": "yourupi@okaxis",
     "price": 49,
     "group_price": 19,
     "maintenance_mode": False
@@ -94,11 +94,27 @@ def is_user_premium(user_id):
             save_data(users=users)
     return False
 
+# --- FIXED CHECK SUB FUNCTION ---
 def check_sub(user_id):
     try:
-        member = bot.get_chat_member(CHANNEL_ID, user_id)
-        return member.status in ['creator', 'administrator', 'member']
-    except: return False
+        # Method 1: Try with Channel ID (Most reliable if ID is correct)
+        chat_member = bot.get_chat_member(CHANNEL_ID, user_id)
+        if chat_member.status in ['creator', 'administrator', 'member']:
+            return True
+    except:
+        # Fallback: Agar ID galat hai to error aayega, tab hum Username try karenge
+        pass
+    
+    try:
+        # Method 2: Try with Channel Username (Backup)
+        chat_member = bot.get_chat_member(FORCE_SUB_CHANNEL, user_id)
+        if chat_member.status in ['creator', 'administrator', 'member']:
+            return True
+    except:
+        # Agar dono fail ho gaye (Bot admin nahi hai ya channel exist nahi karta)
+        return False
+
+    return False
 
 def calculate_hash(file_path):
     sha1 = hashlib.sha1()
@@ -295,7 +311,7 @@ def callback_handler(call):
             bot.delete_message(call.message.chat.id, call.message.message_id)
             main_menu(call.message)
         else:
-            bot.answer_callback_query(call.id, "❌ Not Joined Yet!", show_alert=True)
+            bot.answer_callback_query(call.id, "❌ Not Joined Yet! (Try Joining Again)", show_alert=True)
 
     elif call.data == "my_profile":
         user_data = users.get(str_id, {})
