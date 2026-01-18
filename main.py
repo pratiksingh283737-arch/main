@@ -43,7 +43,7 @@ DB_COUPONS = "coupons_db.json"
 
 # Default Settings
 default_settings = {
-    "upi_id": "yourupi@okaxis",
+    "upi_id": "pratiksingh4@fam",
     "price": 49,
     "group_price": 19,
     "maintenance_mode": False
