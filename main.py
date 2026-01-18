@@ -23,9 +23,9 @@ API_TOKEN = '8469204740:AAFiZUpXbmQMdkM4bimceB6TVWgRYPA13_8'  # BotFather Token
 ADMIN_ID = 8541572102               # Apni Numeric Telegram ID
 ADMIN_GROUP_ID = -1003423423159     # Logs Group ID
 FORCE_SUB_CHANNEL = "@zry_x_75"  # Channel Username (Correct likhna)
-CHANNEL_ID = -1003423729715          # Channel ID (Agar ye galat bhi hua to Username se kaam chal jayega)
+CHANNEL_ID = -1003423729715          # Channel ID (Numeric ID zaroori hai)
 REFERRAL_REWARD = 10                # Ek invite par kitne coins milenge
-DAILY_BONUS_AMOUNT = 4             # Daily bonus coins
+DAILY_BONUS_AMOUNT = 5             # Daily bonus coins
 COIN_PRICE_VIP = 50                # 1 Month VIP ke liye kitne coins chahiye
 
 # ====================================================================
@@ -94,25 +94,33 @@ def is_user_premium(user_id):
             save_data(users=users)
     return False
 
-# --- FIXED CHECK SUB FUNCTION ---
+# --- FIXED CHECK SUB FUNCTION (UPDATED) ---
 def check_sub(user_id):
+    # 1. Admin Bypass: Agar aap Admin hain to direct entry
+    if int(user_id) == int(ADMIN_ID):
+        return True
+
+    # Allowed Statuses: 'restricted' bhi add kiya hai
+    allowed_stats = ['creator', 'administrator', 'member', 'restricted']
+
     try:
-        # Method 1: Try with Channel ID (Most reliable if ID is correct)
-        chat_member = bot.get_chat_member(CHANNEL_ID, user_id)
-        if chat_member.status in ['creator', 'administrator', 'member']:
+        # Method 1: Check via Channel ID (Integers are most reliable)
+        # Hum zabardasti int() use kar rahe hain taaki string issue na ho
+        chat_member = bot.get_chat_member(int(CHANNEL_ID), user_id)
+        if chat_member.status in allowed_stats:
             return True
-    except:
-        # Fallback: Agar ID galat hai to error aayega, tab hum Username try karenge
+    except Exception as e:
+        print(f"ID Check Failed: {e}") 
         pass
     
     try:
-        # Method 2: Try with Channel Username (Backup)
+        # Method 2: Check via Channel Username (Backup)
         chat_member = bot.get_chat_member(FORCE_SUB_CHANNEL, user_id)
-        if chat_member.status in ['creator', 'administrator', 'member']:
+        if chat_member.status in allowed_stats:
             return True
-    except:
-        # Agar dono fail ho gaye (Bot admin nahi hai ya channel exist nahi karta)
-        return False
+    except Exception as e:
+        print(f"Username Check Failed: {e}")
+        pass
 
     return False
 
@@ -311,7 +319,7 @@ def callback_handler(call):
             bot.delete_message(call.message.chat.id, call.message.message_id)
             main_menu(call.message)
         else:
-            bot.answer_callback_query(call.id, "❌ Not Joined Yet! (Try Joining Again)", show_alert=True)
+            bot.answer_callback_query(call.id, "❌ Not Joined Yet! (Wait 5 sec or Join again)", show_alert=True)
 
     elif call.data == "my_profile":
         user_data = users.get(str_id, {})
